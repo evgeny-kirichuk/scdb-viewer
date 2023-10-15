@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
-	"proxy": "http://localhost:5500/",
 	"scripts": {
 		"start": "webpack serve --config webpack/webpack.config.js --env stand=local",
 		"build": "webpack --config webpack/webpack.config.js --env stand=prod",

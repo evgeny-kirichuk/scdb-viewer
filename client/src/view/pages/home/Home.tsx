@@ -14,20 +14,25 @@ const HomePage = () => {
 
 	const loadBooks = async (searchString: string) => {
 		try {
-			const res = await fetch(`/api/books?stringToSearch=${searchString}`, {
+			const res = await fetch(`http://localhost:5500/api/v1/`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
-
+			console.log(res);
 			if (!res.ok) {
 				return;
 			}
 
-			const data: BookData[] = await res.json();
-
-			if (data) {
-				setBooks(data);
+			try {
+				console.log('DATA1');
+				const data: BookData[] = await res.json();
+				console.log('DATA2', data);
+			} catch (err) {
+				console.log('ERROR', err);
 			}
+			// if (data) {
+			// 	// setBooks(data);
+			// }
 		} catch (err) {
 			// process error with error tracking service
 		}
@@ -35,6 +40,7 @@ const HomePage = () => {
 
 	const handleInput = debounce((e) => {
 		if (e.target.value !== '') {
+			console.log('searching');
 			loadBooks(e.target.value);
 		}
 	}, 500);
