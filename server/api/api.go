@@ -2,8 +2,12 @@ package api
 
 import (
 	"flag"
+	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/filesystem"
+
+	view "github.com/evgeny-kirichuk/scdb-viewer/client"
 )
 
 var config = fiber.Config{
@@ -20,14 +24,18 @@ func StartServer() {
 	apiv1 := app.Group("/api/v1")
 
 	// routes
-	app.Static("/", "../client/build/")
 	apiv1.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-	app.Get("*", func(c *fiber.Ctx) error {
-		return c.SendFile("../client/build/index.html")
-	})
+	// static files embedded in binary
+	app.Use("/", filesystem.New(filesystem.Config{
+		Root:         http.FS(view.Build),
+		Browse:       true,
+		PathPrefix:   "/build",
+		Index:        "index.html",
+		NotFoundFile: "/build/index.html",
+	}))
 
 	app.Listen(*addr)
 }
