@@ -12,3 +12,6 @@ buildClient:
 
 buildServer:
 	@go build -o bin/api cmd/viewer/main.go
+
+golint:
+	@golangci-lint run
