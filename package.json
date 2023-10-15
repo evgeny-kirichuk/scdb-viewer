@@ -1,0 +1,20 @@
+{
+  "name": "book-store",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "install:apps": "concurrently \"npm install --prefix server\" \"npm install --prefix client\"",
+    "server": "npm start --prefix server",
+    "server:prod": "cd server && node index.js",
+    "client": "npm start --prefix client",
+    "test:client": "npm test --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build:client": "npm run build --prefix client",
+    "rungo": "cd go && go run main.go"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

@@ -1,0 +1,20 @@
+.root {
+	background: var(--color-background-main);
+	border: 1px solid var(--color-outline-main);
+	font-size: var(--font-size-M);
+	color: var(--color-text-contrast);
+
+	width: 100%;
+	padding: var(--spacing-S);
+	box-sizing: border-box;
+
+	transition: border 0.2s;
+
+	&:hover {
+		border: 1px solid var(--color-outline-active);
+	}
+
+	&:focus-visible {
+		outline: var(--outline-focus);
+	}
+}

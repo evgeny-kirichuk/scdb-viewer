@@ -1,0 +1,26 @@
+.layoutRoot {
+	background: var(--color-background-main);
+	width: 100%;
+	min-height: 100vh;
+	border-radius: 0;
+	display: grid;
+	grid-template-rows: 1fr var(--footer-height);
+	padding-top: var(--header-height);
+	grid-template-columns: 100%;
+	overflow-x: hidden;
+	box-sizing: border-box;
+
+	.content {
+		display: grid;
+		grid-template-columns: 1fr max-content;
+		grid-template-rows: 1fr;
+		justify-content: center;
+		align-content: center;
+		padding: var(--spacing-M);
+
+		@media (max-width: 768px) {
+			grid-template-columns: 1fr;
+			align-content: start;
+		}
+	}
+}
