@@ -17,10 +17,10 @@ const root = createRoot(rootNode);
 
 root.render(<App />);
 
-if (shouldInstallServiceWorker) {
-	registerServiceWorker();
-}
+// if (shouldInstallServiceWorker) {
+// 	registerServiceWorker();
+// }
 
-if (!shouldInstallServiceWorker) {
-	unregisterServiceWorker();
-}
+// if (!shouldInstallServiceWorker) {
+// 	unregisterServiceWorker();
+// }
