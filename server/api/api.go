@@ -21,6 +21,7 @@ func StartServer() {
 	apiv1 := app.Group("/api/v1")
 
 	// routes
+	app.Static("/", "../../client/build/")
 	apiv1.Get("/", func (c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 })
