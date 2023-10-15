@@ -18,10 +18,6 @@ const config = {
 		'^~(.*)$': '<rootDir>/src/$1',
 		'\\.(css|scss)$': '<rootDir>/src/utils/testing/_stylesMock.js',
 	},
-	modulePathIgnorePatterns: [
-		'<rootDir>/src/serviceWorkerManifest.js',
-		'<rootDir>/src/serviceWorkerRegistration.js',
-	],
 };
 
 module.exports = config;

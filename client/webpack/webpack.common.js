@@ -5,12 +5,10 @@ const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const { InjectManifest } = require('workbox-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (stand) => {
 	const isDevMode = stand === 'local' || stand === 'dev';
-	const isLocalStand = stand === 'local';
 
 	return {
 		entry: path.resolve(__dirname, '..', './src/index.tsx'),
@@ -154,19 +152,6 @@ module.exports = (stand) => {
 			new Dotenv({
 				path: path.resolve(__dirname, '..', './.env'),
 			}),
-			...(!isLocalStand
-				? [
-						new InjectManifest({
-							swSrc: path.resolve(
-								__dirname,
-								'../src',
-								'serviceWorkerManifest.js'
-							),
-							swDest: path.resolve(__dirname, '../build', 'sw.js'),
-							maximumFileSizeToCacheInBytes: 8000000,
-						}),
-				  ]
-				: []),
 		],
 	};
 };
