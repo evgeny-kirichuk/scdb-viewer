@@ -1,5 +1,5 @@
 serveApi:
-	@go run server/cmd/api/main.go
+	@go run cmd/viewer/main.go
 
 serveClient:
 	@npm start --prefix client
@@ -7,8 +7,8 @@ serveClient:
 local:
 	make -j 2 serveApi serveClient
 
-buildApi:
-	@go build -o bin/api server/cmd/api/main.go
-
 buildClient:
 	@npm run build --prefix client
+
+buildServer:
+	@go build -o bin/api cmd/viewer/main.go

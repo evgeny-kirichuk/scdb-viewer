@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/evgeny-kirichuk/scdb-viewer/server/api"
+	api "github.com/evgeny-kirichuk/scdb-viewer/internal"
 )
 
 func main() {
