@@ -16,20 +16,18 @@ func StartServer() {
 	addr := flag.String("addr", ":5500", "http service address")
 	flag.Parse()
 
-
 	app := fiber.New(config)
 	apiv1 := app.Group("/api/v1")
 
 	// routes
 	app.Static("/", "../client/build/")
-	apiv1.Get("/", func (c *fiber.Ctx) error {
+	apiv1.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
 
-
-  app.Get("*", func(c *fiber.Ctx) error {
-    return c.SendFile("../client/build/index.html")
-  })
+	app.Get("*", func(c *fiber.Ctx) error {
+		return c.SendFile("../client/build/index.html")
+	})
 
 	app.Listen(*addr)
 }
