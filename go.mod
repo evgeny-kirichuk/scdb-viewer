@@ -2,7 +2,10 @@ module github.com/evgeny-kirichuk/scdb-viewer
 
 go 1.21.1
 
-require github.com/gofiber/fiber/v2 v2.49.2
+require (
+	github.com/gofiber/fiber/v2 v2.49.2
+	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
+)
 
 require (
 	github.com/andybalholm/brotli v1.0.5 // indirect

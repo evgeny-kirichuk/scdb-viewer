@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
+	"github.com/skratchdot/open-golang/open"
 
 	view "github.com/evgeny-kirichuk/scdb-viewer/client"
 )
@@ -37,5 +38,6 @@ func StartServer() {
 		NotFoundFile: "/build/index.html",
 	}))
 
+	open.Run("http://localhost:5500")
 	app.Listen(*addr)
 }
