@@ -21,3 +21,4 @@ ALTER TABLE keyspace.table_name with cdc = {'enabled': true};
 ```
 To learn more about Scylla CDC, visit [Change Data Capture (CDC) page](https://opensource.docs.scylladb.com/stable/using-scylla/cdc/index.html).
 
+Full Cluster setup example [here](https://university.scylladb.com/setup-a-scylla-cluster/)
