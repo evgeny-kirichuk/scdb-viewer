@@ -1,10 +1,6 @@
 # dependencies
 node_modules
 
-# production
-build
-
-
 # IDEs and editors
 /.idea
 .project
