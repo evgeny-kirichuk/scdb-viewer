@@ -2,6 +2,7 @@ package api
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 
 	view "github.com/evgeny-kirichuk/scdb-viewer/client"
@@ -30,7 +31,7 @@ func StartServer() {
 	cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
 	session, err := gocql.NewSession(*cluster)
 	if err != nil {
-		logger.Fatal("unable to connect to scylla", zap.Error(err))
+		fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
 	}
 	defer session.Close()
 
@@ -45,7 +46,7 @@ func StartServer() {
 	}))
 
 	// routes
-	apiv1.Get("/tabless", func(c *fiber.Ctx) error {
+	apiv1.Get("/tables", func(c *fiber.Ctx) error {
 		res := scylla.SelectTables(session, logger)
 		return c.JSON(res)
 	})

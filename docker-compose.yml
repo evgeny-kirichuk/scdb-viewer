@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile
       context: ./
     volumes:
-      - ./:/app
+      - .:/app
     ports:
     - 8000:8000
     networks:

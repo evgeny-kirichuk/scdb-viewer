@@ -12,9 +12,9 @@ const HomePage = () => {
 	const [books, setBooks] = useState<BookData[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const loadBooks = async (searchString: string) => {
+	const loadBooks = async () => {
 		try {
-			const res = await fetch(`http://localhost:5500/api/v1/`, {
+			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
