@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.49.2
 	github.com/scylladb/scylla-cdc-go v1.1.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
+	go.uber.org/zap v1.26.0
 )
 
 require (
@@ -22,6 +23,7 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.49.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
+	go.uber.org/multierr v1.10.0 // indirect
 	golang.org/x/sync v0.0.0-20200317015054-43a5402ce75a // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
