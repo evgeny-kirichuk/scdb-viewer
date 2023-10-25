@@ -2,6 +2,8 @@ module github.com/evgeny-kirichuk/scdb-viewer
 
 go 1.21.1
 
+replace github.com/gocql/gocql => github.com/scylladb/gocql v1.11.1
+
 require (
 	github.com/gocql/gocql v1.6.0
 	github.com/gofiber/fiber/v2 v2.49.2

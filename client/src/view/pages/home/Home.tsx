@@ -2,16 +2,43 @@ import React, { useEffect, useRef, useState } from 'react';
 import { debounce } from 'lodash';
 
 import { BookData } from '~/types';
-import { BookPreview } from '~molecules/bookPreview/BookPreview';
 import Input from '~atoms/input/Input';
-import { cartActions } from '~view/contexts/cart/CartProvider';
+// import { cartActions } from '~view/contexts/cart/CartProvider';
 
 import styles from './Home.module.scss';
 
+type Status = {
+	status: 'connected' | 'disconnected';
+};
+
 const HomePage = () => {
-	const [conneted, setConnected] = useState<boolean>(false);
+	const [connectionStatus, setConnectionStatus] = useState<
+		'connected' | 'disconnected'
+	>('disconnected');
 	const [tables, setTables] = useState<any[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	const checkStatus = async () => {
+		try {
+			const res = await fetch(`http://localhost:8000/api/v1/status`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
+			if (!res.ok) {
+				return;
+			}
+
+			try {
+				const data: Status = await res.json();
+				setConnectionStatus(data.status);
+			} catch (err) {
+				console.log(err);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
 
 	const connect = async () => {
 		try {
@@ -25,9 +52,8 @@ const HomePage = () => {
 			}
 
 			try {
-				const data = await res.json();
-				console.log(data);
-				setConnected(true);
+				const data: Status = await res.json();
+				setConnectionStatus(data.status);
 			} catch (err) {
 				console.log(err);
 			}
@@ -39,6 +65,11 @@ const HomePage = () => {
 	const loadTables = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
+			const r = await fetch(`http://localhost:8000/api/v1/cluster`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
@@ -65,12 +96,9 @@ const HomePage = () => {
 		}
 	}, 500);
 
-	const addBookToCart = (book: BookData) => {
-		cartActions.addToCart(book);
-	};
-
 	useEffect(() => {
 		// loadBooks(inputRef.current?.value || '');
+		checkStatus();
 	}, []);
 
 	return (

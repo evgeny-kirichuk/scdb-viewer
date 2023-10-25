@@ -55,7 +55,6 @@ func SelectTables(session *gocql.Session, logger *zap.Logger) map[string]map[str
 
 func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
 	logger.Info("Displaying Results:")
-
 	keyspacesIt := session.Query("SELECT * FROM system_schema.keyspaces").Iter()
 
 	defer func() {
@@ -79,4 +78,33 @@ func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[
 	}
 
 	return keyspacesValues
+}
+
+
+func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
+	it := session.Query("SELECT * FROM system.peers").Iter()
+
+	defer func() {
+		if err := it.Close(); err != nil {
+			logger.Warn("select catalog.mutant", zap.Error(err))
+		}
+	}()
+
+	values := map[string]map[string]interface{}{}
+	indx := 0
+	for {
+		// New map each iteration
+		row := make(map[string]interface{})
+		if !it.MapScan(row) {
+			break
+		}
+		indx++
+		// Do things with row
+		if peer, ok := row["peer"]; ok {
+			logger.Info(fmt.Sprintf("%v", peer))
+			values[fmt.Sprintf("%v", peer)] = row
+		}
+	}
+	values["count"] = map[string]interface{}{"count": indx}
+	return values
 }

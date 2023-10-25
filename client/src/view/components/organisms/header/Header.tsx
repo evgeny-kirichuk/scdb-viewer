@@ -9,8 +9,8 @@ export const Header: React.FC = () => {
 		<header className={styles.headerWrapper}>
 			<div className={styles.headerItems}>
 				<a className={styles.logoLink} href=".">
-					<span className={styles.y}>B</span>
-					<span className={styles.js}>OOKS</span>
+					<span className={styles.y}>SC</span>
+					<span className={styles.js}>DB-VIEWER</span>
 				</a>
 				<CartTrigger />
 			</div>

@@ -58,6 +58,19 @@ func StartServer() {
 		return c.JSON(res)
 	})
 
+	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
+		res := scylla.SelectClusterInfo(session, logger)
+		return c.JSON(res)
+	})
+
+	apiv1.Get("/status", func(c *fiber.Ctx) error {
+		if session == nil {
+			return c.JSON(map[string]string{"status": "disconnected"})
+		} else {
+			return c.JSON(map[string]string{"status": "connected"})
+		}
+	})
+
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
 		if session == nil {
 			fmt.Printf("new session")
@@ -65,7 +78,7 @@ func StartServer() {
 			newSession, err := gocql.NewSession(*cluster)
 			if err != nil {
 				fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
-				return c.JSON(map[string]string{"status": "refused"})
+				return c.JSON(map[string]string{"status": "disconnected"})
 			}
 			session = newSession
 			return c.JSON(map[string]string{"status": "connected"})
