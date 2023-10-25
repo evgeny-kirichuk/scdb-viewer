@@ -25,3 +25,7 @@ docker-compose rm -f
 - Make a "run query" api to execute queries from the frontend app
 - Dockerize the app
 - Build a desktop version
+
+
+## links
+cql docs [here](https://cassandra.apache.org/doc/latest/cassandra/cql/)
