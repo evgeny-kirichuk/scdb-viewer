@@ -9,30 +9,50 @@ import { cartActions } from '~view/contexts/cart/CartProvider';
 import styles from './Home.module.scss';
 
 const HomePage = () => {
-	const [books, setBooks] = useState<BookData[]>([]);
+	const [conneted, setConnected] = useState<boolean>(false);
+	const [tables, setTables] = useState<any[]>([]);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const loadBooks = async () => {
+	const connect = async () => {
 		try {
-			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
+			const res = await fetch(`http://localhost:8000/api/v1/connect`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
-			console.log(res);
+
 			if (!res.ok) {
 				return;
 			}
 
 			try {
-				console.log('DATA1');
+				const data = await res.json();
+				console.log(data);
+				setConnected(true);
+			} catch (err) {
+				console.log(err);
+			}
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	const loadTables = async () => {
+		try {
+			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
+			if (!res.ok) {
+				return;
+			}
+
+			try {
 				const data: BookData[] = await res.json();
-				console.log('DATA2', data);
+				setTables(data);
 			} catch (err) {
 				console.log('ERROR', err);
 			}
-			// if (data) {
-			// 	// setBooks(data);
-			// }
 		} catch (err) {
 			// process error with error tracking service
 		}
@@ -41,7 +61,7 @@ const HomePage = () => {
 	const handleInput = debounce((e) => {
 		if (e.target.value !== '') {
 			console.log('searching');
-			loadBooks(e.target.value);
+			// loadBooks(e.target.value);
 		}
 	}, 500);
 
@@ -50,7 +70,7 @@ const HomePage = () => {
 	};
 
 	useEffect(() => {
-		loadBooks(inputRef.current?.value || '');
+		// loadBooks(inputRef.current?.value || '');
 	}, []);
 
 	return (
@@ -64,12 +84,18 @@ const HomePage = () => {
 					onChange={handleInput}
 				/>
 			</div>
+			<button style={{ width: '200px', height: '40px' }} onClick={connect}>
+				Connect
+			</button>
+			<button style={{ width: '200px', height: '40px' }} onClick={loadTables}>
+				Load Tables
+			</button>
 			<div className={styles.itemsGrid}>
-				{books.map((book) => {
-					return (
-						<BookPreview key={book.id} book={book} onAdd={addBookToCart} />
-					);
-				})}
+				{Object.keys(tables).map((key) => (
+					<div key={tables[key].table_name} className={styles.item}>
+						{tables[key].table_name}
+					</div>
+				))}
 			</div>
 		</div>
 	);

@@ -59,14 +59,20 @@ func StartServer() {
 	})
 
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
-	cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
-	newSession, err := gocql.NewSession(*cluster)
-	if err != nil {
-		fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
-		return c.JSON(map[string]string{"error": err.Error()})
-	}
-	session = newSession
-	return c.JSON(map[string]string{"status": "connected"})
+		if session == nil {
+			fmt.Printf("new session")
+			cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
+			newSession, err := gocql.NewSession(*cluster)
+			if err != nil {
+				fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
+				return c.JSON(map[string]string{"status": "refused"})
+			}
+			session = newSession
+			return c.JSON(map[string]string{"status": "connected"})
+		} else {
+			fmt.Printf("session already exists")
+			return c.JSON(map[string]string{"status": "connected"})
+		}
 	})
 
 	// static files embedded in binary
