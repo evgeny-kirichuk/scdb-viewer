@@ -26,13 +26,15 @@ func StartServer() {
 	addr := flag.String("addr", ":8000", "http service address")
 	flag.Parse()
 
+	var session *gocql.Session
+
 	logger := log.CreateLogger("info")
 
-	cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
-	session, err := gocql.NewSession(*cluster)
-	if err != nil {
-		fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
-	}
+	// cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
+	// session, err := gocql.NewSession(*cluster)
+	// if err != nil {
+	// 	fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
+	// }
 	defer session.Close()
 
 	app := fiber.New(config)
@@ -54,6 +56,17 @@ func StartServer() {
 	apiv1.Get("/keyspaces", func(c *fiber.Ctx) error {
 		res := scylla.SelectKeyspaces(session, logger)
 		return c.JSON(res)
+	})
+
+	apiv1.Get("/connect", func(c *fiber.Ctx) error {
+	cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
+	newSession, err := gocql.NewSession(*cluster)
+	if err != nil {
+		fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
+		return c.JSON(map[string]string{"error": err.Error()})
+	}
+	session = newSession
+	return c.JSON(map[string]string{"status": "connected"})
 	})
 
 	// static files embedded in binary
