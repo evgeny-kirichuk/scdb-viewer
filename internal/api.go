@@ -27,15 +27,9 @@ func StartServer() {
 	flag.Parse()
 
 	var session *gocql.Session
+	defer session.Close()
 
 	logger := log.CreateLogger("info")
-
-	// cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
-	// session, err := gocql.NewSession(*cluster)
-	// if err != nil {
-	// 	fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
-	// }
-	defer session.Close()
 
 	app := fiber.New(config)
 	apiv1 := app.Group("/api/v1")
@@ -74,7 +68,7 @@ func StartServer() {
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
 		if session == nil {
 			fmt.Printf("new session")
-			cluster := scylla.CreateCluster(gocql.Quorum, "system", "scylla-node1", "scylla-node2", "scylla-node3")
+			cluster := scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3")
 			newSession, err := gocql.NewSession(*cluster)
 			if err != nil {
 				fmt.Printf("unable to connect to scylla, %v", zap.Error(err))

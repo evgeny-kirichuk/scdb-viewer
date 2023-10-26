@@ -7,32 +7,13 @@ import (
 	"go.uber.org/zap"
 )
 
-func SelectQuery(session *gocql.Session, logger *zap.Logger) map[string]string {
-	logger.Info("Displaying Results:")
-	q := session.Query("SELECT first_name,last_name,address,picture_location FROM mutant_data")
-	var firstName, lastName, address, pictureLocation string
-	it := q.Iter()
-	res := make(map[string]string)
-	defer func() {
-		if err := it.Close(); err != nil {
-			logger.Warn("select catalog.mutant", zap.Error(err))
-		}
-	}()
-	for it.Scan(&firstName, &lastName, &address, &pictureLocation) {
-		logger.Info("\t" + firstName + " " + lastName + ", " + address + ", " + pictureLocation)
-		res[firstName] = lastName
-	}
-
-	return res
-}
-
 func SelectTables(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
 	logger.Info("Displaying Results:")
 	tablesIt := session.Query("SELECT * FROM system_schema.tables").Iter()
 
 	defer func() {
 		if err := tablesIt.Close(); err != nil {
-			logger.Warn("select catalog.mutant", zap.Error(err))
+			logger.Warn("select system_schema.tables", zap.Error(err))
 		}
 	}()
 
@@ -59,7 +40,7 @@ func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[
 
 	defer func() {
 		if err := keyspacesIt.Close(); err != nil {
-			logger.Warn("select catalog.mutant", zap.Error(err))
+			logger.Warn("select system_schema.keyspaces", zap.Error(err))
 		}
 	}()
 
@@ -86,7 +67,7 @@ func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]ma
 
 	defer func() {
 		if err := it.Close(); err != nil {
-			logger.Warn("select catalog.mutant", zap.Error(err))
+			logger.Warn("select system.peers", zap.Error(err))
 		}
 	}()
 

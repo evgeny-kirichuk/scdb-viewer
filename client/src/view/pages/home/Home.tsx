@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { debounce } from 'lodash';
+import React, { useEffect, useState } from 'react';
 
 import { BookData } from '~/types';
-import Input from '~atoms/input/Input';
 // import { cartActions } from '~view/contexts/cart/CartProvider';
 
 import styles from './Home.module.scss';
@@ -16,7 +14,6 @@ const HomePage = () => {
 		'connected' | 'disconnected'
 	>('disconnected');
 	const [tables, setTables] = useState<any[]>([]);
-	const inputRef = useRef<HTMLInputElement>(null);
 
 	const checkStatus = async () => {
 		try {
@@ -89,13 +86,6 @@ const HomePage = () => {
 		}
 	};
 
-	const handleInput = debounce((e) => {
-		if (e.target.value !== '') {
-			console.log('searching');
-			// loadBooks(e.target.value);
-		}
-	}, 500);
-
 	useEffect(() => {
 		// loadBooks(inputRef.current?.value || '');
 		checkStatus();
@@ -104,20 +94,15 @@ const HomePage = () => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.controls}>
-				<Input
-					ref={inputRef}
-					className={styles.searchInput}
-					placeholder="Search"
-					defaultValue="nosql"
-					onChange={handleInput}
-				/>
+				<button style={{ width: '200px', height: '40px' }} onClick={connect}>
+					Connect
+				</button>
+				<span>{connectionStatus}</span>
+				<button style={{ width: '200px', height: '40px' }} onClick={loadTables}>
+					Load Tables
+				</button>
 			</div>
-			<button style={{ width: '200px', height: '40px' }} onClick={connect}>
-				Connect
-			</button>
-			<button style={{ width: '200px', height: '40px' }} onClick={loadTables}>
-				Load Tables
-			</button>
+
 			<div className={styles.itemsGrid}>
 				{Object.keys(tables).map((key) => (
 					<div key={tables[key].table_name} className={styles.item}>
