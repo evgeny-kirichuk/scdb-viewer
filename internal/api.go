@@ -13,7 +13,6 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/skratchdot/open-golang/open"
-	"go.uber.org/zap"
 )
 
 var config = fiber.Config{
@@ -67,14 +66,13 @@ func StartServer() {
 
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
 		if session == nil {
-			fmt.Printf("new session")
 			cluster := scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3")
 			newSession, err := gocql.NewSession(*cluster)
 			if err != nil {
-				fmt.Printf("unable to connect to scylla, %v", zap.Error(err))
 				return c.JSON(map[string]string{"status": "disconnected"})
 			}
 			session = newSession
+
 			return c.JSON(map[string]string{"status": "connected"})
 		} else {
 			fmt.Printf("session already exists")
