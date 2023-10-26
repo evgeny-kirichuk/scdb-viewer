@@ -9,11 +9,15 @@ type Status = {
 	status: 'connected' | 'disconnected';
 };
 
+type AnyObject = {
+	[key: string]: any;
+};
+
 const HomePage = () => {
 	const [connectionStatus, setConnectionStatus] = useState<
 		'connected' | 'disconnected'
 	>('disconnected');
-	const [tables, setTables] = useState<any[]>([]);
+	const [tables, setTables] = useState<AnyObject>({});
 
 	const checkStatus = async () => {
 		try {
@@ -70,7 +74,7 @@ const HomePage = () => {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
-
+			console.log(r);
 			if (!res.ok) {
 				return;
 			}

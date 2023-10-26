@@ -20,17 +20,53 @@ var config = fiber.Config{
 	},
 }
 
+func ClusterConfigToMap(cluster *gocql.ClusterConfig) map[string]interface{} {
+	return map[string]interface{}{
+		"Consistency": cluster.Consistency,
+		"Hosts":       cluster.Hosts,
+		"Keyspace":    cluster.Keyspace,
+		"Timeout":     cluster.Timeout,
+		"RetryPolicy": cluster.RetryPolicy,
+		"CQLVersion": cluster.CQLVersion,
+		"ProtoVersion": cluster.ProtoVersion,
+		"ConnectTimeout": cluster.ConnectTimeout,
+		"WriteTimeout": cluster.WriteTimeout,
+		"Port": cluster.Port,
+		"NumConns": cluster.NumConns,
+		"MaxRequestsPerConn": cluster.MaxRequestsPerConn,
+		"SocketKeepalive": cluster.SocketKeepalive,
+		"MaxPreparedStmts": cluster.MaxPreparedStmts,
+		"MaxRoutingKeyInfo": cluster.MaxRoutingKeyInfo,
+		"PageSize": cluster.PageSize,
+		"SerialConsistency": cluster.SerialConsistency,
+		"DefaultTimestamp": cluster.DefaultTimestamp,
+		"ReconnectInterval": cluster.ReconnectInterval,
+		"MaxWaitSchemaAgreement": cluster.MaxWaitSchemaAgreement,
+		"IgnorePeerAddr": cluster.IgnorePeerAddr,
+		"DisableInitialHostLookup": cluster.DisableInitialHostLookup,
+		"DisableSkipMetadata": cluster.DisableSkipMetadata,
+		"DefaultIdempotence": cluster.DefaultIdempotence,
+		"WriteCoalesceWaitTime": cluster.WriteCoalesceWaitTime,
+		"DisableShardAwarePort": cluster.DisableShardAwarePort,
+	}
+}
+
 func StartServer() {
 	addr := flag.String("addr", ":8000", "http service address")
 	flag.Parse()
 
-	var session *gocql.Session
+	var (
+		session *gocql.Session
+		cluster *gocql.ClusterConfig
+	)
 	defer session.Close()
 
 	logger := log.CreateLogger("info")
 
 	app := fiber.New(config)
 	apiv1 := app.Group("/api/v1")
+
+
 
 	app.Use(cors.New(cors.Config{
 		AllowHeaders:     "Origin,Content-Type,Accept,Content-Length,Accept-Language,Accept-Encoding,Connection,Access-Control-Allow-Origin",
@@ -52,6 +88,8 @@ func StartServer() {
 
 	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
 		res := scylla.SelectClusterInfo(session, logger)
+		res["cluster"] = ClusterConfigToMap(cluster)
+
 		return c.JSON(res)
 	})
 
@@ -65,7 +103,7 @@ func StartServer() {
 
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
 		if session == nil {
-			cluster := scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3")
+			cluster = scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3")
 			cluster.HostFilter = gocql.WhiteListHostFilter("scylla-node1")
 
 			newSession, err := gocql.NewSession(*cluster)
