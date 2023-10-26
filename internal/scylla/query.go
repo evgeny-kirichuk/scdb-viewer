@@ -8,7 +8,7 @@ import (
 )
 
 func SelectTables(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
-	logger.Info("Displaying Results:")
+	logger.Info("Displaying Results1234:")
 	tablesIt := session.Query("SELECT * FROM system_schema.tables").Iter()
 
 	defer func() {
@@ -35,7 +35,7 @@ func SelectTables(session *gocql.Session, logger *zap.Logger) map[string]map[str
 }
 
 func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
-	logger.Info("Displaying Results:")
+	logger.Info("Displaying Results123:")
 	keyspacesIt := session.Query("SELECT * FROM system_schema.keyspaces").Iter()
 
 	defer func() {
@@ -61,31 +61,44 @@ func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[
 	return keyspacesValues
 }
 
-
 func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
-	it := session.Query("SELECT * FROM system.peers").Iter()
-
+	peersIt := session.Query("SELECT * FROM system.peers").Iter()
+	localIt := session.Query("SELECT * FROM system.local").Iter()
 	defer func() {
-		if err := it.Close(); err != nil {
+		if err := peersIt.Close(); err != nil {
 			logger.Warn("select system.peers", zap.Error(err))
+		}
+		if err := localIt.Close(); err != nil {
+			logger.Warn("select system.local", zap.Error(err))
 		}
 	}()
 
 	values := map[string]map[string]interface{}{}
-	indx := 0
+
 	for {
 		// New map each iteration
 		row := make(map[string]interface{})
-		if !it.MapScan(row) {
+		if !peersIt.MapScan(row) {
 			break
 		}
-		indx++
 		// Do things with row
 		if peer, ok := row["peer"]; ok {
-			logger.Info(fmt.Sprintf("%v", peer))
-			values[fmt.Sprintf("%v", peer)] = row
+			logger.Info(fmt.Sprintf("peer: %v", peer))
+			values["peer."+fmt.Sprintf("%v", peer)] = row
 		}
 	}
-	values["count"] = map[string]interface{}{"count": indx}
+	for {
+		// New map each iteration
+		row := make(map[string]interface{})
+		if !localIt.MapScan(row) {
+			break
+		}
+		// Do things with row
+		if addr, ok := row["broadcast_address"]; ok {
+			logger.Info(fmt.Sprintf("loc: %v", addr))
+			values["loc."+fmt.Sprintf("%v", addr)] = row
+		}
+	}
+
 	return values
 }

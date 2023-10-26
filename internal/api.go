@@ -2,7 +2,6 @@ package api
 
 import (
 	"flag"
-	"fmt"
 	"net/http"
 
 	view "github.com/evgeny-kirichuk/scdb-viewer/client"
@@ -67,6 +66,8 @@ func StartServer() {
 	apiv1.Get("/connect", func(c *fiber.Ctx) error {
 		if session == nil {
 			cluster := scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3")
+			cluster.HostFilter = gocql.WhiteListHostFilter("scylla-node1")
+
 			newSession, err := gocql.NewSession(*cluster)
 			if err != nil {
 				return c.JSON(map[string]string{"status": "disconnected"})
@@ -75,7 +76,6 @@ func StartServer() {
 
 			return c.JSON(map[string]string{"status": "connected"})
 		} else {
-			fmt.Printf("session already exists")
 			return c.JSON(map[string]string{"status": "connected"})
 		}
 	})
