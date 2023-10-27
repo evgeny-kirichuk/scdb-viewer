@@ -29,3 +29,7 @@ docker-compose rm -f
 
 ## links
 cql docs [here](https://cassandra.apache.org/doc/latest/cassandra/cql/)
+
+clients connections:
+query := session.Query("SELECT * FROM system.clients")
+[doc](https://opensource.docs.scylladb.com/stable/troubleshooting/clients-table.html)

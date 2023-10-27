@@ -84,7 +84,7 @@ func StartServer() {
 			cluster = scylla.CreateCluster(gocql.Quorum, "scylla-node1", "scylla-node2", "scylla-node3", "scylla-node4", "scylla-node5", "scylla-node6")
 			cluster.HostFilter = gocql.WhiteListHostFilter("scylla-node1")
 
-			newSession, err := gocql.NewSession(*cluster)
+			newSession, err := cluster.CreateSession()
 			if err != nil {
 				return c.JSON(map[string]string{"status": "disconnected"})
 			}
