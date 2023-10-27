@@ -83,7 +83,6 @@ func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]ma
 		}
 		// Do things with row
 		if peer, ok := row["peer"]; ok {
-			logger.Info(fmt.Sprintf("peer: %v", peer))
 			values["peer."+fmt.Sprintf("%v", peer)] = row
 		}
 	}
@@ -95,7 +94,6 @@ func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]ma
 		}
 		// Do things with row
 		if addr, ok := row["broadcast_address"]; ok {
-			logger.Info(fmt.Sprintf("loc: %v", addr))
 			values["loc."+fmt.Sprintf("%v", addr)] = row
 		}
 	}

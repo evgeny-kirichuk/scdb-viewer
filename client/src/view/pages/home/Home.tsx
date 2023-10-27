@@ -13,11 +13,44 @@ type AnyObject = {
 	[key: string]: any;
 };
 
+const ObjectTree: React.FC<AnyObject> = ({ data }) => {
+	if (typeof data !== 'object') {
+		// Render leaf nodes (non-object values)
+		return <span>{data}</span>;
+	}
+
+	if (Array.isArray(data)) {
+		// Render array nodes
+		return (
+			<ul>
+				{data.map((item, index) => (
+					<li key={index}>
+						<ObjectTree data={item} />
+					</li>
+				))}
+			</ul>
+		);
+	}
+
+	// Render object nodes
+	return (
+		<ul>
+			{Object.keys(data).map((key) => (
+				<li key={key}>
+					<strong>{key}: </strong>
+					<ObjectTree data={data[key]} />
+				</li>
+			))}
+		</ul>
+	);
+};
+
 const HomePage = () => {
 	const [connectionStatus, setConnectionStatus] = useState<
 		'connected' | 'disconnected'
 	>('disconnected');
 	const [tables, setTables] = useState<AnyObject>({});
+	const [cluster, setCluster] = useState<AnyObject>({});
 
 	const checkStatus = async () => {
 		try {
@@ -74,14 +107,20 @@ const HomePage = () => {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
-			console.log(r);
+
 			if (!res.ok) {
+				return;
+			}
+
+			if (!r.ok) {
 				return;
 			}
 
 			try {
 				const data: BookData[] = await res.json();
 				setTables(data);
+				const c = await r.json();
+				setCluster(c.cluster);
 			} catch (err) {
 				console.log('ERROR', err);
 			}
@@ -106,14 +145,16 @@ const HomePage = () => {
 					Load Tables
 				</button>
 			</div>
-
 			<div className={styles.itemsGrid}>
+				<ObjectTree data={cluster} />
+			</div>
+			{/* <div className={styles.itemsGrid}>
 				{Object.keys(tables).map((key) => (
 					<div key={tables[key].table_name} className={styles.item}>
 						{tables[key].table_name}
 					</div>
 				))}
-			</div>
+			</div> */}
 		</div>
 	);
 };
