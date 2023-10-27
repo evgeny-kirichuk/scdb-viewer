@@ -4,9 +4,9 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "webpack serve --config webpack/webpack.config.js --env stand=local",
-		"build": "webpack --config webpack/webpack.config.js --env stand=prod",
-		"build:dev": "webpack --config webpack/webpack.config.js --env stand=dev",
+		"start": "webpack serve --config webpack.js --env stand=local",
+		"build": "webpack --config webpack.js --env stand=prod",
+		"build:dev": "webpack --config webpack.js --env stand=dev",
 		"serveBuild": "npx serve build",
 		"test": "jest",
 		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
