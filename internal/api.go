@@ -66,10 +66,15 @@ func StartServer() {
 
 	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
 		res := scylla.SelectClusterInfo(session, logger)
-		res["cluster"] = ClusterConfigToMap(cluster)
-
 		return c.JSON(res)
 	})
+
+	apiv1.Get("/clients", func(c *fiber.Ctx) error {
+		res := scylla.SelectClients(session, logger)
+		return c.JSON(res)
+	})
+
+
 
 	apiv1.Get("/status", func(c *fiber.Ctx) error {
 		if session == nil {

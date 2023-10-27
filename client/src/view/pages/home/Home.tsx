@@ -108,6 +108,11 @@ const HomePage = () => {
 				headers: { 'Content-Type': 'application/json' },
 			});
 
+			const cl = await fetch(`http://localhost:8000/api/v1/clients`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
 			if (!res.ok) {
 				return;
 			}

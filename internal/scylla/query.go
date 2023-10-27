@@ -100,3 +100,31 @@ func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]ma
 
 	return values
 }
+
+func SelectClients(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
+	logger.Info("Displaying Clients:")
+	it := session.Query("SELECT * FROM system.clients").Iter()
+
+	defer func() {
+		if err := it.Close(); err != nil {
+			logger.Warn("select system.clients", zap.Error(err))
+		}
+	}()
+
+	values := map[string]map[string]interface{}{}
+
+	for {
+		// New map each iteration
+		row := make(map[string]interface{})
+		if !it.MapScan(row) {
+			break
+		}
+		// Do things with row
+		if addr, ok := row["address"]; ok {
+			values[fmt.Sprintf("%v", addr)] = row
+		}
+	}
+
+	return values
+}
+// query := session.Query("SELECT * FROM system.clients")
