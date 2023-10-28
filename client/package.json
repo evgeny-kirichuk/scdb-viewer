@@ -6,7 +6,6 @@
 	"scripts": {
 		"start": "webpack serve --config webpack.js --env stand=local",
 		"build": "webpack --config webpack.js --env stand=prod",
-		"build:dev": "webpack --config webpack.js --env stand=dev",
 		"serveBuild": "npx serve build",
 		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
 		"format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
