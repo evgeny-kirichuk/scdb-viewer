@@ -1,10 +1,27 @@
 import React from 'react';
+import cn from 'classnames';
+import { motion } from 'framer-motion';
 
-import { CartTrigger } from '~molecules/cartTrigger/CartTrigger';
+import { useConnection } from '~/view/contexts/ConnectionProvider';
 
 import styles from './Header.module.scss';
 
 export const Header: React.FC = () => {
+	const { connection, client } = useConnection();
+	console.log(client, Object.keys(client));
+	const connectionStatusText = () => {
+		switch (connection.status) {
+			case 'active':
+				return Object.keys(client)[0];
+			case 'loading':
+				return 'Connecting...';
+			case 'unknown':
+				return '';
+			default:
+				return 'Unknown';
+		}
+	};
+
 	return (
 		<header className={styles.headerWrapper}>
 			<div className={styles.headerItems}>
@@ -12,7 +29,24 @@ export const Header: React.FC = () => {
 					<span className={styles.y}>SC</span>
 					<span className={styles.js}>DB-VIEWER</span>
 				</a>
-				<span>con</span>
+
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.4 }}
+					className={styles.sessionInfo}
+				>
+					<span style={{ gridColumn: 'span 2' }}>Session status:</span>
+					<span className={styles.statusText}>{connectionStatusText()}</span>
+					<span
+						className={cn(styles.statusDott, {
+							[styles.green]: connection.status === 'active',
+							[styles.yellow]: connection.status === 'loading',
+							[styles.grey]: connection.status === 'unknown',
+						})}
+					/>
+				</motion.div>
 			</div>
 		</header>
 	);

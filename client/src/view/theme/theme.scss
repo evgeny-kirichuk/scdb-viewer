@@ -4,7 +4,9 @@
 	--content-area-width: 1200px;
 
 	--color-prymary-main: #57d1e5;
-	--color-success-main: #2d9800;
+	--color-success-main: #5fd92b;
+	--color-idle-main: #9f9f9f;
+	--color-warning-main: #f1cd3b;
 	--color-error-main: #ed0c0c;
 	--color-text-light: #fff;
 	--color-text-dark: #000;
@@ -15,6 +17,7 @@
 	--font-size-M: 24px;
 	--font-size-S: 20px;
 	--font-size-XS: 16px;
+	--font-size-XXS: 12px;
 
 	--line-height-M: 1.5;
 	--line-height-S: 0.9;
@@ -24,6 +27,7 @@
 	--spacing-L: 24px;
 	--spacing-M: 16px;
 	--spacing-S: 8px;
+	--spacing-XS: 4px;
 
 	--outline-focus: 2px solid var(--color-prymary-main);
 }

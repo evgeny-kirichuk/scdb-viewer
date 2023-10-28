@@ -17,6 +17,38 @@
 		margin: auto;
 	}
 
+	.sessionInfo {
+		display: grid;
+		grid-template-columns: max-content max-content;
+		grid-template-rows: 15px 15px;
+		grid-gap: var(--spacing-XS);
+		align-items: center;
+		justify-items: end;
+		align-content: center;
+		height: 100%;
+		font-size: var(--font-size-XXS);
+		color: var(--color-text-contrast);
+
+
+		.statusDott {
+			width: 8px;
+			height: 8px;
+			border-radius: 4px;
+		}
+
+		.green {
+			background-color: var(--color-success-main);
+		}
+
+		.yellow {
+			background-color: var(--color-warning-main);
+		}
+
+		.grey {
+			background-color: var(--color-idle-main);
+		}
+	}
+
 	.logoLink {
 		box-sizing: border-box;
 		border-radius: 5px;

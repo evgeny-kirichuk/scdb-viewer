@@ -49,6 +49,7 @@ const HomePage = () => {
 	const { connection } = useConnection();
 	const [tables, setTables] = useState<AnyObject>({});
 	const [cluster, setCluster] = useState<AnyObject>({});
+	const connected = connection.status === 'active';
 
 	const loadTables = async () => {
 		try {
@@ -62,11 +63,6 @@ const HomePage = () => {
 				headers: { 'Content-Type': 'application/json' },
 			});
 
-			const cl = await fetch(`http://localhost:8000/api/v1/clients`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			});
-
 			if (!res.ok) {
 				return;
 			}
@@ -76,7 +72,7 @@ const HomePage = () => {
 			}
 
 			try {
-				const data: BookData[] = await res.json();
+				const data: AnyObject = await res.json();
 				setTables(data);
 				const c = await r.json();
 				setCluster(c.cluster);
@@ -90,8 +86,8 @@ const HomePage = () => {
 
 	useEffect(() => {
 		// loadBooks(inputRef.current?.value || '');
-		// loadTables();
-	}, []);
+		if (connected) loadTables();
+	}, [connected]);
 
 	return (
 		<div className={styles.wrapper}>
@@ -100,10 +96,11 @@ const HomePage = () => {
 					initial={{ y: 10, opacity: 0 }}
 					animate={{ y: 0, opacity: 1 }}
 					exit={{ y: -10, opacity: 0 }}
-					transition={{ duration: 0.2 }}
-					className={styles.wrap}
+					transition={{ duration: 0.4 }}
+					className={styles.pageContent}
 				>
-					asd
+					<div>tabs</div>
+					<div>tab content</div>
 				</motion.div>
 			) : (
 				<OrbLoader />
