@@ -1,5 +1,4 @@
 .headerWrapper {
-	background: var(--color-background-dark);
 	box-sizing: border-box;
 	position: fixed;
 	top: 0;
@@ -21,7 +20,7 @@
 	.logoLink {
 		box-sizing: border-box;
 		border-radius: 5px;
-		font-size: var(--font-size-M);
+		font-size: var(--font-size-S);
 		font-weight: bold;
 		text-decoration: none;
 		user-select: none;

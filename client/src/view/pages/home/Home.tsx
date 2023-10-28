@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
-import { BookData } from '~/types';
+import { OrbLoader } from '~atoms/OrbLoader/OrbLoader';
+
 // import { cartActions } from '~view/contexts/cart/CartProvider';
 
-import styles from './Home.module.scss';
+import { useConnection } from '~/view/contexts/ConnectionProvider';
 
-type Status = {
-	status: 'connected' | 'disconnected';
-};
+import styles from './Home.module.scss';
 
 type AnyObject = {
 	[key: string]: any;
@@ -46,55 +46,9 @@ const ObjectTree: React.FC<AnyObject> = ({ data }) => {
 };
 
 const HomePage = () => {
-	const [connectionStatus, setConnectionStatus] = useState<
-		'connected' | 'disconnected'
-	>('disconnected');
+	const { connection } = useConnection();
 	const [tables, setTables] = useState<AnyObject>({});
 	const [cluster, setCluster] = useState<AnyObject>({});
-
-	const checkStatus = async () => {
-		try {
-			const res = await fetch(`http://localhost:8000/api/v1/status`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			});
-
-			if (!res.ok) {
-				return;
-			}
-
-			try {
-				const data: Status = await res.json();
-				setConnectionStatus(data.status);
-			} catch (err) {
-				console.log(err);
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	};
-
-	const connect = async () => {
-		try {
-			const res = await fetch(`http://localhost:8000/api/v1/connect`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			});
-
-			if (!res.ok) {
-				return;
-			}
-
-			try {
-				const data: Status = await res.json();
-				setConnectionStatus(data.status);
-			} catch (err) {
-				console.log(err);
-			}
-		} catch (err) {
-			console.log(err);
-		}
-	};
 
 	const loadTables = async () => {
 		try {
@@ -136,12 +90,25 @@ const HomePage = () => {
 
 	useEffect(() => {
 		// loadBooks(inputRef.current?.value || '');
-		checkStatus();
+		// loadTables();
 	}, []);
 
 	return (
 		<div className={styles.wrapper}>
-			<div className={styles.controls}>
+			{connection.status === 'active' ? (
+				<motion.div
+					initial={{ y: 10, opacity: 0 }}
+					animate={{ y: 0, opacity: 1 }}
+					exit={{ y: -10, opacity: 0 }}
+					transition={{ duration: 0.2 }}
+					className={styles.wrap}
+				>
+					asd
+				</motion.div>
+			) : (
+				<OrbLoader />
+			)}
+			{/* <div className={styles.controls}>
 				<button style={{ width: '200px', height: '40px' }} onClick={connect}>
 					Connect
 				</button>
@@ -152,7 +119,7 @@ const HomePage = () => {
 			</div>
 			<div className={styles.itemsGrid}>
 				<ObjectTree data={cluster} />
-			</div>
+			</div> */}
 			{/* <div className={styles.itemsGrid}>
 				{Object.keys(tables).map((key) => (
 					<div key={tables[key].table_name} className={styles.item}>

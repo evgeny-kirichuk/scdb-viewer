@@ -7,16 +7,20 @@ import ErrorBoundary from '~organisms/errorBoundary/errorBoundary';
 import AppRoutes from '~routes/AppRouter';
 import { CartProvider } from '~view/contexts/cart/CartProvider';
 
+import { ConnectionProvider } from './contexts/ConnectionProvider';
+
 const ViewEntrypoint: React.FunctionComponent = () => {
 	return (
 		<OnlineStatusProvider>
-			<ThemeProvider>
-				<ErrorBoundary errorScreen={<CrashMessage />}>
-					<CartProvider>
-						<AppRoutes />
-					</CartProvider>
-				</ErrorBoundary>
-			</ThemeProvider>
+			<ConnectionProvider>
+				<ThemeProvider>
+					<ErrorBoundary errorScreen={<CrashMessage />}>
+						<CartProvider>
+							<AppRoutes />
+						</CartProvider>
+					</ErrorBoundary>
+				</ThemeProvider>
+			</ConnectionProvider>
 		</OnlineStatusProvider>
 	);
 };

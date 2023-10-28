@@ -1,13 +1,11 @@
-export type BookData = {
-	id: string;
-	title: string;
-	description: string;
-	image?: string;
-	pages: number;
-	price?: number;
-	currency?: string;
-	ISBN?: string;
-	revision?: string;
+export type Connection = {
+	status: 'active' | 'loading' | 'idle' | 'unknown';
 };
 
-export type CartItem = BookData & { quantity: number };
+export type ConnectionClient = {
+	[key: string]: {
+		address: string;
+		client_type: string;
+		driver_name: string;
+	};
+};

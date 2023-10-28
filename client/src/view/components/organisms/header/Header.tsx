@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
 					<span className={styles.y}>SC</span>
 					<span className={styles.js}>DB-VIEWER</span>
 				</a>
-				<CartTrigger />
+				<span>con</span>
 			</div>
 		</header>
 	);

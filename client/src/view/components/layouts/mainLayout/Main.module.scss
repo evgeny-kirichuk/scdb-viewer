@@ -1,5 +1,5 @@
 .layoutRoot {
-	background: var(--color-background-main);
+	background: linear-gradient(132deg, var(--color-background-main), var(--color-outline-main));
 	width: 100%;
 	min-height: 100vh;
 	border-radius: 0;
@@ -16,7 +16,7 @@
 		grid-template-rows: 1fr;
 		justify-content: center;
 		align-content: center;
-		padding: var(--spacing-M);
+		padding: 0 var(--spacing-M) var(--spacing-M);
 
 		@media (max-width: 768px) {
 			grid-template-columns: 1fr;

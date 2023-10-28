@@ -66,6 +66,7 @@ func StartServer() {
 
 	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
 		res := scylla.SelectClusterInfo(session, logger)
+		res["cluster"] = ClusterConfigToMap(cluster)
 		return c.JSON(res)
 	})
 
@@ -78,9 +79,9 @@ func StartServer() {
 
 	apiv1.Get("/status", func(c *fiber.Ctx) error {
 		if session == nil {
-			return c.JSON(map[string]string{"status": "disconnected"})
+			return c.JSON(map[string]string{"status": "idle"})
 		} else {
-			return c.JSON(map[string]string{"status": "connected"})
+			return c.JSON(map[string]string{"status": "active"})
 		}
 	})
 
@@ -91,13 +92,13 @@ func StartServer() {
 
 			newSession, err := cluster.CreateSession()
 			if err != nil {
-				return c.JSON(map[string]string{"status": "disconnected"})
+				return c.JSON(map[string]string{"status": "loading"})
 			}
 			session = newSession
 
-			return c.JSON(map[string]string{"status": "connected"})
+			return c.JSON(map[string]string{"status": "active"})
 		} else {
-			return c.JSON(map[string]string{"status": "connected"})
+			return c.JSON(map[string]string{"status": "active"})
 		}
 	})
 
