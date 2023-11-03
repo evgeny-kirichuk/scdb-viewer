@@ -13,15 +13,7 @@ import (
 // Make sure you create the following table before you run this example:
 // CREATE TABLE ks.tbl (pk int, ck int, v int, PRIMARY KEY (pk, ck)) WITH cdc = {'enabled': 'true'};
 
-func StartPrinter() {
-	cluster := gocql.NewCluster("127.0.0.1")
-	cluster.PoolConfig.HostSelectionPolicy = gocql.TokenAwareHostPolicy(gocql.DCAwareRoundRobinPolicy("local-dc"))
-	session, err := cluster.CreateSession()
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer session.Close()
-
+func StartPrinter(session *gocql.Session) {
 	cfg := &scyllacdc.ReaderConfig{
 		Session:               session,
 		TableNames:            []string{"mykeyspace.users"},
