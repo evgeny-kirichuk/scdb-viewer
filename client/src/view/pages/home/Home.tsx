@@ -89,7 +89,7 @@ const HomePage = () => {
 			// process error with error tracking service
 		}
 	};
-	console.log('peers', peersByDC);
+
 	const loadTables = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
