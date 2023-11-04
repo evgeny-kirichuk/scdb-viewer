@@ -66,7 +66,6 @@ func StartServer() {
 
 	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
 		res := scylla.SelectClusterInfo(session, logger)
-		res["cluster"] = ClusterConfigToMap(cluster)
 		return c.JSON(res)
 	})
 
