@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { OrbLoader } from '~atoms/OrbLoader/OrbLoader';
@@ -54,6 +54,19 @@ const HomePage = () => {
 	}>({});
 	const connected = connection.status === 'active';
 
+	const peersByDC = useMemo(
+		() =>
+			Object.values(peers).reduce((acc, peer) => {
+				if (peer.data_center in acc) {
+					acc[peer.data_center].push(peer);
+				} else {
+					acc[peer.data_center] = [peer];
+				}
+				return acc;
+			}, {} as { [key: string]: (ClusterPeer | LocalPeer)[] }),
+		[peers]
+	);
+
 	const loadPeers = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/v1/cluster`, {
@@ -76,7 +89,7 @@ const HomePage = () => {
 			// process error with error tracking service
 		}
 	};
-	console.log('peers', peers);
+	console.log('peers', peersByDC);
 	const loadTables = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
