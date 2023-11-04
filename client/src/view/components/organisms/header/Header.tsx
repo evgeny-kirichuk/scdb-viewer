@@ -8,7 +8,7 @@ import styles from './Header.module.scss';
 
 export const Header: React.FC = () => {
 	const { connection, client } = useConnection();
-	console.log(client, Object.keys(client));
+
 	const connectionStatusText = () => {
 		switch (connection.status) {
 			case 'active':

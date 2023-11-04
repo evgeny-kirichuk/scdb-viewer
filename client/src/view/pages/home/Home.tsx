@@ -6,6 +6,7 @@ import { OrbLoader } from '~atoms/OrbLoader/OrbLoader';
 // import { cartActions } from '~view/contexts/cart/CartProvider';
 
 import { useConnection } from '~/view/contexts/ConnectionProvider';
+import { ClusterPeer, LocalPeer } from '~/types';
 
 import styles from './Home.module.scss';
 
@@ -48,17 +49,14 @@ const ObjectTree: React.FC<AnyObject> = ({ data }) => {
 const HomePage = () => {
 	const { connection } = useConnection();
 	const [tables, setTables] = useState<AnyObject>({});
-	const [cluster, setCluster] = useState<AnyObject>({});
+	const [peers, setPeers] = useState<{
+		[key: string]: ClusterPeer | LocalPeer;
+	}>({});
 	const connected = connection.status === 'active';
 
-	const loadTables = async () => {
+	const loadPeers = async () => {
 		try {
-			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			});
-
-			const r = await fetch(`http://localhost:8000/api/v1/cluster`, {
+			const res = await fetch(`http://localhost:8000/api/v1/cluster`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});
@@ -67,15 +65,32 @@ const HomePage = () => {
 				return;
 			}
 
-			if (!r.ok) {
+			try {
+				const data: { [key: string]: ClusterPeer | LocalPeer } =
+					await res.json();
+				setPeers(data);
+			} catch (err) {
+				console.log('ERROR', err);
+			}
+		} catch (err) {
+			// process error with error tracking service
+		}
+	};
+	console.log('peers', peers);
+	const loadTables = async () => {
+		try {
+			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
+			if (!res.ok) {
 				return;
 			}
 
 			try {
 				const data: AnyObject = await res.json();
 				setTables(data);
-				const c = await r.json();
-				setCluster(c.cluster);
 			} catch (err) {
 				console.log('ERROR', err);
 			}
@@ -85,8 +100,10 @@ const HomePage = () => {
 	};
 
 	useEffect(() => {
-		// loadBooks(inputRef.current?.value || '');
-		if (connected) loadTables();
+		if (connected) {
+			loadPeers();
+			loadTables();
+		}
 	}, [connected]);
 
 	return (
