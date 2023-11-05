@@ -132,7 +132,9 @@ const HomePage = () => {
 				>
 					<div>tabs</div>
 					<div>
-						<DcInfo />
+						{Object.keys(peersByDC).map((key, i) => (
+							<DcInfo key={`${key}-${i}`} title={key} peers={peersByDC[key]} />
+						))}
 					</div>
 				</motion.div>
 			) : (
