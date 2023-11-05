@@ -7,6 +7,7 @@ import { OrbLoader } from '~atoms/OrbLoader/OrbLoader';
 
 import { useConnection } from '~/view/contexts/ConnectionProvider';
 import { ClusterPeer, LocalPeer } from '~/types';
+import { DcInfo } from '~/view/components/molecules/dcInfo/DcInfo';
 
 import styles from './Home.module.scss';
 
@@ -130,7 +131,9 @@ const HomePage = () => {
 					className={styles.pageContent}
 				>
 					<div>tabs</div>
-					<div>tab content</div>
+					<div>
+						<DcInfo />
+					</div>
 				</motion.div>
 			) : (
 				<OrbLoader />
