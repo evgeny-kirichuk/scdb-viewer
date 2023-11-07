@@ -50,6 +50,7 @@ const ObjectTree: React.FC<AnyObject> = ({ data }) => {
 const HomePage = () => {
 	const { connection } = useConnection();
 	const [tables, setTables] = useState<AnyObject>({});
+	const [keyspaces, setKeyspaces] = useState<AnyObject>({});
 	const [peers, setPeers] = useState<{
 		[key: string]: ClusterPeer | LocalPeer;
 	}>({});
@@ -91,6 +92,28 @@ const HomePage = () => {
 		}
 	};
 
+	const loadKeyspaces = async () => {
+		try {
+			const res = await fetch(`http://localhost:8000/api/v1/keyspaces`, {
+				method: 'GET',
+				headers: { 'Content-Type': 'application/json' },
+			});
+
+			if (!res.ok) {
+				return;
+			}
+
+			try {
+				const data: AnyObject = await res.json();
+				setKeyspaces(data);
+			} catch (err) {
+				console.log('ERROR', err);
+			}
+		} catch (err) {
+			// process error with error tracking service
+		}
+	};
+
 	const loadTables = async () => {
 		try {
 			const res = await fetch(`http://localhost:8000/api/v1/tables`, {
@@ -117,6 +140,7 @@ const HomePage = () => {
 		if (connected) {
 			loadPeers();
 			loadTables();
+			loadKeyspaces();
 		}
 	}, [connected]);
 
