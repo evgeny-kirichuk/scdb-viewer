@@ -71,7 +71,7 @@ const HomePage = () => {
 
 	const loadPeers = async () => {
 		try {
-			const res = await fetch(`http://localhost:8000/api/v1/cluster`, {
+			const res = await fetch(`http://localhost:8000/api/v1/peers`, {
 				method: 'GET',
 				headers: { 'Content-Type': 'application/json' },
 			});

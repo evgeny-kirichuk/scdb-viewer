@@ -61,7 +61,7 @@ func SelectKeyspaces(session *gocql.Session, logger *zap.Logger) map[string]map[
 	return keyspacesValues
 }
 
-func SelectClusterInfo(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
+func SelectPeersInfo(session *gocql.Session, logger *zap.Logger) map[string]map[string]interface{} {
 	peersIt := session.Query("SELECT * FROM system.peers").Iter()
 	localIt := session.Query("SELECT * FROM system.local").Iter()
 	defer func() {

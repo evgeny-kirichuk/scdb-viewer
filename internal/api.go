@@ -64,8 +64,8 @@ func StartServer() {
 		return c.JSON(res)
 	})
 
-	apiv1.Get("/cluster", func(c *fiber.Ctx) error {
-		res := scylla.SelectClusterInfo(session, logger)
+	apiv1.Get("/peers", func(c *fiber.Ctx) error {
+		res := scylla.SelectPeersInfo(session, logger)
 		return c.JSON(res)
 	})
 
