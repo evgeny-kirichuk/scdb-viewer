@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
 					transition={{ duration: 0.4 }}
 					className={styles.sessionInfo}
 				>
-					<span style={{ gridColumn: 'span 2' }}>Session status:</span>
+					<span style={{ gridColumn: 'span 2' }}>Client status:</span>
 					<span className={styles.statusText}>{connectionStatusText()}</span>
 					<span
 						className={cn(styles.statusDott, {

@@ -164,25 +164,6 @@ const HomePage = () => {
 			) : (
 				<OrbLoader />
 			)}
-			{/* <div className={styles.controls}>
-				<button style={{ width: '200px', height: '40px' }} onClick={connect}>
-					Connect
-				</button>
-				<span>{connectionStatus}</span>
-				<button style={{ width: '200px', height: '40px' }} onClick={loadTables}>
-					Load Tables
-				</button>
-			</div>
-			<div className={styles.itemsGrid}>
-				<ObjectTree data={cluster} />
-			</div> */}
-			{/* <div className={styles.itemsGrid}>
-				{Object.keys(tables).map((key) => (
-					<div key={tables[key].table_name} className={styles.item}>
-						{tables[key].table_name}
-					</div>
-				))}
-			</div> */}
 		</div>
 	);
 };
