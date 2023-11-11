@@ -2,9 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { OrbLoader } from '~atoms/OrbLoader/OrbLoader';
-
-// import { cartActions } from '~view/contexts/cart/CartProvider';
-
 import { useConnection } from '~/view/contexts/ConnectionProvider';
 import { ClusterPeer, LocalPeer } from '~/types';
 import { DcInfo } from '~/view/components/molecules/dcInfo/DcInfo';
