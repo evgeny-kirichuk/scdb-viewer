@@ -152,6 +152,7 @@ const HomePage = () => {
 					className={styles.pageContent}
 				>
 					<div>tabs</div>
+					<span>Your DCs</span>
 					<div>
 						{Object.keys(peersByDC).map((key, i) => (
 							<DcInfo key={`${key}-${i}`} title={key} peers={peersByDC[key]} />
